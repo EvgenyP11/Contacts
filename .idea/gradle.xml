@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="false" />
+        <option name="distributionType" value="WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Contacts (Kotlin)/task" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Application" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Find the average of numbers" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Hacking the Matrix" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Harry and the Spell Power" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/The right result of this function" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Theory" />
+            <option value="$PROJECT_DIR$/Topics/Fold and reduce on collections/Which definition is correct" />
+            <option value="$PROJECT_DIR$/util" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

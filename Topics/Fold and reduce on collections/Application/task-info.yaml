@@ -1,0 +1,12 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: "data class Ship(val name: String, val ammunition: Int)\n\nfun main() {\n\
+    \    val ships = readln().split(\" \")\n    val shipsList = ships.map { Ship(it.split(\"\
+    -\")[0], it.split(\"-\")[1].toInt()) }\n\n    // write your code here\n    val\
+    \ res = \n\n\n    println(res)\n}"
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23345#comment
+status: Solved
+record: -1

@@ -1,0 +1,24 @@
+type: choice
+is_multiple_choice: false
+options:
+- text: Returns a collection with index value and intermediate accumulator
+- text: Takes the element index as a parameter and performs the action with the accumulator
+    and the elements form right to left.
+- text: Returns the result of a calculation using the index
+- text: Returns the calculation from right to left using index as the initial value
+    of the accumulator
+files:
+- name: src/Main.kt
+  visible: true
+  text: |
+    // You can experiment here, it won’t be checked
+
+    fun main(args: Array<String>) {
+      // put your code here
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23338#comment
+status: Solved
+record: -1
+custom_name: Which definition is correct?
+local_check: false

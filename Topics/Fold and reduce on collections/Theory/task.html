@@ -1,0 +1,217 @@
+<h2>Fold and reduce on collections</h2>
+<p>In previous lessons, we have learned to perform some task on collections: filtering, ordering, and obtaining information with aggregates.</p>
+<p>However, sometimes we need to perform more complex operations on the elements sequentially and return the accumulated result. We will see that Kotlin has methods that make such tasks quite easy to handle.</p>
+<h5 id="fold-and-reduce">Fold and Reduce</h5>
+<p>With <code class="language-kotlin">fold()</code> and <code class="language-kotlin">reduce()</code>, we can operate on the elements of a collection as a sequence and return the accumulated result.<br/>
+There are some subtle differences between the methods, though.</p>
+<ul>
+<li><code class="language-kotlin">reduce()</code> transforms a given collection into a single result. It takes a lambda function operator to combine a pair of elements into an accumulated value. Then it loops through the collection and performs the operation step by step combining the accumulated value with the next element in the collection. </li>
+<li><code class="language-kotlin">fold()</code> takes an <strong>initial value</strong>, uses it as the accumulated value on the first step, and applies the operation from left to right combining the current accumulated value with each element.</li>
+</ul>
+<pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5)
+    
+    // fold uses the parameter as the initial value of the accumulator
+    var sum = list.fold(0) { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+    }
+    println(sum) // 15
+    
+    var product = list.fold(1) { acc, i -&gt;
+        println("acc: $acc, i: $i, acc * i: ${acc * i}")
+        acc * i
+    }
+    println(product) // 120
+    
+    // reduce uses the first element as the initial value of the accumulator
+    sum = list.reduce { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+    }
+    println(sum) // 15
+    
+    product = list.reduce { acc, i -&gt;
+        println("acc: $acc, i: $i, acc * i: ${acc * i}")
+        acc * i
+    }
+    println(product) // 120
+}</code></pre>
+<p>Let's see the differences in the step-by-step operations with <code class="language-kotlin">fold</code> and <code class="language-kotlin">reduce</code> in the above methods.</p>
+<p><code class="language-kotlin">fold</code> performs as many operations as there are elements in the collection.</p>
+<pre><code class="language-kotlin">    // fold uses the parameter as the initial value of the accumulator
+    var sum = list.fold(0) { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+    }
+    println(sum) // 15
+    var product = list.fold(1) { acc, i -&gt;
+        println("acc: $acc, i: $i, acc * i: ${acc * i}")
+        acc * i
+    }
+    println(product) // 120</code></pre>
+<pre><code class="language-kotlin">acc: 0, i: 1, acc + i: 1
+acc: 1, i: 2, acc + i: 3
+acc: 3, i: 3, acc + i: 6
+acc: 6, i: 4, acc + i: 10
+acc: 10, i: 5, acc + i: 15
+15
+acc: 1, i: 1, acc * i: 1
+acc: 1, i: 2, acc * i: 2
+acc: 2, i: 3, acc * i: 6
+acc: 6, i: 4, acc * i: 24
+acc: 24, i: 5, acc * i: 120
+120</code></pre>
+<p>When using <code class="language-kotlin">fold</code>, the initial value will be the default value with an <strong>empty collection</strong>. We can<strong> change the type </strong>of the return value thanks to the implementation of this function. </p>
+<pre><code class="language-kotlin">    // empty list
+    val emptyList = listOf&lt;Int&gt;()
+    
+    // fold uses the parameter as the initial value of the accumulator
+    sum = emptyList.fold(0) { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+    }
+    println(sum) // 0
+
+    // with fold you can change the type of the accumulator
+    val list2 = listOf("a", "b", "c", "d", "e")
+    val string = list2.fold(StringBuilder()) { acc, s -&gt;
+        acc.append(s)
+    }
+    println(string) // abcde
+    
+</code></pre>
+<p><code class="language-kotlin">reduce</code> performs one step less because the accumulator is the first element.</p>
+<pre><code class="language-kotlin">    // reduce uses the first element as the initial value of the accumulator
+    sum = list.reduce { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+    }
+    println(sum) // 15
+    product = list.reduce { acc, i -&gt;
+        println("acc: $acc, i: $i, acc * i: ${acc * i}")
+        acc * i
+    }
+    println(product) // 120</code></pre>
+<pre><code class="language-kotlin">acc: 1, i: 2, acc + i: 3
+acc: 3, i: 3, acc + i: 6
+acc: 6, i: 4, acc + i: 10
+acc: 10, i: 5, acc + i: 15
+15
+acc: 1, i: 2, acc * i: 2
+acc: 2, i: 3, acc * i: 6
+acc: 6, i: 4, acc * i: 24
+acc: 24, i: 5, acc * i: 120
+120
+</code></pre>
+<p><code class="language-kotlin">reduce</code> will throw an<strong> exception</strong> if performed on an empty collection. The result of a <code class="language-kotlin">reduce</code> operation will always be of the<strong> same type</strong> (or a super type) as the data that is being reduced – we cannot change it to another type.</p>
+<pre><code class="language-kotlin">    // empty list
+    val emptyList = listOf&lt;Int&gt;()
+
+    // reduce uses the first element as the initial value of the accumulator
+    // Throws exception: Empty collection can't be reduced.
+    sum = emptyList.reduce { acc, i -&gt;
+        println("acc: $acc, i: $i, acc + i: ${acc + i}")
+        acc + i
+     }
+     println(sum)
+
+    // with reduce you can't change the type of the accumulator. Compiler error
+    val string2 = list2.reduce(StringBuilder()) { acc, s -&gt;
+       acc.append(s)
+    }</code></pre>
+<h5 id="reverse-order">Reverse order</h5>
+<p>Sometimes, we need to perform the actions in the reverse order. We can use <code class="language-kotlin">foldRight()</code> and <code class="language-kotlin">reduceRight()</code> to apply operations from right to left. However, remember that the operation arguments change their order: first goes the element and then the accumulated value.</p>
+<pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5)
+
+    // foldRight, use the parameter as the initial value of the accumulator.
+    // from right to left
+    sum = list.foldRight(0) { i, acc -&gt; acc + i }
+    println(sum) // 15
+    product = list.foldRight(1) { i, acc -&gt; acc * i }
+    println(product) // 120
+    
+    // reduceRight, use the last element as the initial value of the accumulator
+    // from right to left
+    sum = list.reduceRight { i, acc -&gt; acc + i }
+    println(sum) // 15
+    product = list.reduceRight { i, acc -&gt; acc * i }
+    println(product) // 120
+}</code></pre>
+<h5 id="accumulate-result-with-indices">Accumulate result with indices</h5>
+<p>In some tasks, you may need to use the index to perform the calculation. You can apply operations that take element indices as parameters. Kotlin has <code class="language-kotlin">reduceIndexed()</code> and <code class="language-kotlin">foldIndexed()</code>, which use the index as the first parameter. Also, we can use <code class="language-kotlin">reduceRightIndexed()</code> and <code class="language-kotlin">foldRightIndexed()</code> to perform the action form right to left. </p>
+<pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5)
+   
+    // foldIndexed and FoldRightIndexed are similar to Fold and FoldRight,
+    // but they have an additional parameter to indicate the index of the element to fold
+    // sum of even elements
+    sum = list.foldIndexed(0) { index, acc, i -&gt;
+        if (index % 2 == 0) acc + i else acc
+    }
+    println(sum) // 9
+    
+    // product of odd elements right to left
+    product = list.foldRightIndexed(1) { index, i, acc -&gt;
+        if (index % 2 == 1) acc * i else acc
+    }
+    println(product) // 8
+
+    // reduceIndexed and ReduceRightIndexed are similar to Reduce and ReduceRight,
+    // but they have an additional parameter to indicate the index of the element to reduce
+    // sum of even elements
+    sum = list.reduceIndexed { index, acc, i -&gt;
+        if (index % 2 == 0) acc + i else acc
+    }
+    println(sum) // 9
+    
+    // product of odd elements right to left
+    product = list.reduceRightIndexed { index, i, acc -&gt;
+        if (index % 2 == 1) acc * i else acc
+    }
+    println(product) // 40
+}</code></pre>
+<h5 id="work-with-nullable-collections">Work with nullable collections</h5>
+<p>All the reduce operations that we have presented throw an exception on empty collections. If we want to get null, we must use the same methods but ending with <code class="language-kotlin">*OrNull()</code>: <code class="language-kotlin">reduceOrNull()</code>, <code class="language-kotlin">reduceRightOrNull()</code>, <code class="language-kotlin">reduceIndexedOrNull()</code>, and <code class="language-kotlin">reduceRightIndexedOrNull()</code>.</p>
+<pre><code class="language-kotlin">fun main() {
+    
+    // fold and reduce with empty collections
+    sum = emptyList&lt;Int&gt;().fold(0) { acc, i -&gt; acc + i }
+    println(sum) // 0
+    
+    // sum = emptyList&lt;Int&gt;().reduce { acc, i -&gt; acc + i } // exception
+    // println(sum)
+    sum = emptyList&lt;Int&gt;().reduceOrNull { acc, i -&gt; acc + i } ?: 0 // is null
+    println(sum) // 0
+
+}</code></pre>
+<h5 id="accumulate-with-intermediate-results">Accumulate with intermediate results</h5>
+<p>Finally, in some cases it is interesting to save the intermediate value of the accumulator. For this purpose, we have <code class="language-kotlin">runningFold()</code>, <code class="language-kotlin">runningReduce()</code>, <code class="language-kotlin">runningFoldIndexed()</code>, and <code class="language-kotlin">runningReduceIndexed()</code>, which return a list with the intermediate results.</p>
+<pre><code class="language-kotlin">fun main() {
+    val list = listOf(1, 2, 3, 4, 5)
+  
+    println("runningFold and runningReduce")
+    
+    // runningFold and RunningReduce are similar to Fold and Reduce,
+    // but they return a list of intermediate results
+    val runningSum = list.runningFold(0) { acc, i -&gt; acc + i }
+    println(runningSum) // [0, 1, 3, 6, 10, 15]
+    
+    val runningProduct = list.runningReduce { acc, i -&gt; acc * i }
+    println(runningProduct) // [1, 2, 6, 24, 120]
+    
+    // with index
+    val runningSumWithIndex = list.runningFoldIndexed(0) { index, acc, i -&gt;
+        if (index % 2 == 0) acc + i else acc
+    }
+    println(runningSumWithIndex) // [0, 1, 1, 4, 4, 9]
+    
+    val runningProductWithIndex = list.runningReduceIndexed { index, acc, i -&gt;
+        if (index % 2 == 1) acc * i else acc
+    }
+    println(runningProductWithIndex) // [1, 2, 2, 8, 8, 40]
+}</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we have discussed different methods to perform specific calculations with <code class="language-kotlin">fold</code> and <code class="language-kotlin">reduce</code> on<strong> </strong>the elements of a collection – either based on their value or using their index to perform such operations.</p>
+<p>It's time to check everything you've learned and do some tasks. Let's go!</p>

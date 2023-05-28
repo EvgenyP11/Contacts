@@ -1,0 +1,10 @@
+type: code
+files:
+- name: src/Main.kt
+  visible: true
+  text: "fun main() {\n    val list = readln().split(\" \").map { it.toDouble() }\n\
+    \    // write your code here\n    val res = \n\n\n    println(res)\n}"
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/23340#comment
+status: Solved
+record: -1
